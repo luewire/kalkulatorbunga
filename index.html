@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bunga</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Bunga</h1>
+        <div class="form-group">
+            <label for="loan-amount">Jumlah Pinjaman:</label>
+            <input type="text" id="loan-amount" placeholder="Rupiah">
+        </div>
+        <div class="form-group">
+            <label for="interest-type">Jenis Bunga:</label>
+            <select id="interest-type">
+                <option value="simple">Bunga Tunggal</option>
+                <option value="compound">Bunga Majemuk</option>
+                <option value="annuity">Bunga Anuitas</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="interest-rate">Suku Bunga (%):</label>
+            <input type="number" id="interest-rate" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="loan-term">Lama Pinjaman:</label>
+            <select id="loan-term"></select>
+        </div>
+        <button onclick="calculateLoan()">Hitung</button>
+        <div id="result"></div>
+        <div id="installment-details"></div>
+    </div>
+    <script src="script.js"></script>
+    <body>
+        <footer>
+            <p>Copyright &copy; Kelompok 5</p>
+        </footer> 
+</body>
+</html>
