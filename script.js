@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Populate loan term options
     const loanTermSelect = document.getElementById('loan-term');
     for (let i = 1; i <= 30; i++) {
         let option = document.createElement('option');
@@ -8,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
         loanTermSelect.appendChild(option);
     }
 
-    // Format input as currency
     const loanAmountInput = document.getElementById('loan-amount');
     loanAmountInput.addEventListener('input', () => {
         let value = loanAmountInput.value.replace(/\D/g, '');
@@ -25,18 +23,21 @@ function calculateLoan() {
     let interest, total, installment, details;
     switch (interestType) {
         case 'simple':
+            //Rumus Bunga Tunggal
             interest = (principal * rate * term);
             total = principal + interest;
             installment = total / (term * 12);
             details = calculateSimpleInterestDetails(principal, rate, term, installment);
             break;
         case 'compound':
+            //Rumus Bunga Majemuk
             total = principal * Math.pow(1 + rate, term);
             interest = total - principal;
             installment = total / (term * 12);
             details = calculateCompoundInterestDetails(principal, rate, term, installment);
             break;
         case 'annuity':
+            //Bunga Anunitas
             const monthlyRate = rate / 12;
             installment = principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -term * 12));
             total = installment * term * 12;
