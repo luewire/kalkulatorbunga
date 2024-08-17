@@ -75,12 +75,10 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
     const monthlyRate = rate / 12;
-    
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
         balance -= principalPortion;
-        
         details += `
             <tr>
                 <td>${month}</td>
@@ -94,17 +92,16 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     }
     return details;
 }
+
 
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
     const monthlyRate = rate / 12;
-
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
-        balance -= principalPortion;
-        
+        balance += interestPortion - principalPortion;
         details += `
             <tr>
                 <td>${month}</td>
@@ -118,6 +115,7 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     }
     return details;
 }
+
 
 function calculateAnnuityDetails(principal, rate, term, installment) {
     let details = '';
