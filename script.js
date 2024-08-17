@@ -78,7 +78,19 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
+
+        // Pastikan pokok pinjaman tidak lebih besar dari sisa pinjaman
+        if (principalPortion > balance) {
+            principalPortion = balance;
+        }
+
         balance -= principalPortion;
+        
+        // Pastikan balance tidak menjadi negatif
+        if (balance < 0) {
+            balance = 0;
+        }
+
         details += `
             <tr>
                 <td>${month}</td>
@@ -92,7 +104,6 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     }
     return details;
 }
-
 
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
@@ -101,7 +112,19 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
+
+        // Pastikan pokok pinjaman tidak lebih besar dari sisa pinjaman
+        if (principalPortion > balance) {
+            principalPortion = balance;
+        }
+
         balance += interestPortion - principalPortion;
+        
+        // Pastikan balance tidak menjadi negatif
+        if (balance < 0) {
+            balance = 0;
+        }
+
         details += `
             <tr>
                 <td>${month}</td>
@@ -115,7 +138,6 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     }
     return details;
 }
-
 
 function calculateAnnuityDetails(principal, rate, term, installment) {
     let details = '';
