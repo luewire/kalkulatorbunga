@@ -77,9 +77,9 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     const monthlyRate = rate / 12;
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
-        const principalPortion = installment - interestPortion;
+        let principalPortion = installment - interestPortion;
 
-        // Pastikan pokok pinjaman tidak lebih besar dari sisa pinjaman
+        // Jika principalPortion lebih besar dari balance, set ke balance
         if (principalPortion > balance) {
             principalPortion = balance;
         }
@@ -101,9 +101,15 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
                 <td>${(monthlyRate * 100).toFixed(2)}%</td>
             </tr>
         `;
+
+        // Jika balance sudah mencapai 0, berhenti
+        if (balance === 0) {
+            break;
+        }
     }
     return details;
 }
+
 
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
@@ -111,14 +117,14 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     const monthlyRate = rate / 12;
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
-        const principalPortion = installment - interestPortion;
+        let principalPortion = installment - interestPortion;
 
-        // Pastikan pokok pinjaman tidak lebih besar dari sisa pinjaman
+        // Jika principalPortion lebih besar dari balance, set ke balance
         if (principalPortion > balance) {
             principalPortion = balance;
         }
 
-        balance += interestPortion - principalPortion;
+        balance -= principalPortion;
         
         // Pastikan balance tidak menjadi negatif
         if (balance < 0) {
@@ -135,9 +141,15 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
                 <td>${(monthlyRate * 100).toFixed(2)}%</td>
             </tr>
         `;
+
+        // Jika balance sudah mencapai 0, berhenti
+        if (balance === 0) {
+            break;
+        }
     }
     return details;
 }
+
 
 function calculateAnnuityDetails(principal, rate, term, installment) {
     let details = '';
