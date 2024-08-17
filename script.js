@@ -23,21 +23,18 @@ function calculateLoan() {
     let interest, total, installment, details;
     switch (interestType) {
         case 'simple':
-            //Rumus Bunga Tunggal
             interest = (principal * rate * term);
             total = principal + interest;
             installment = total / (term * 12);
             details = calculateSimpleInterestDetails(principal, rate, term, installment);
             break;
         case 'compound':
-            //Rumus Bunga Majemuk
             total = principal * Math.pow(1 + rate, term);
             interest = total - principal;
             installment = total / (term * 12);
             details = calculateCompoundInterestDetails(principal, rate, term, installment);
             break;
         case 'annuity':
-            //Bunga Anunitas
             const monthlyRate = rate / 12;
             installment = principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -term * 12));
             total = installment * term * 12;
@@ -76,14 +73,18 @@ function calculateLoan() {
 
 function calculateSimpleInterestDetails(principal, rate, term, installment) {
     let details = '';
+    let balance = principal;
     const monthlyRate = rate / 12;
+    
     for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = (principal * rate * (30 / 360));
+        const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
+        balance -= principalPortion;
+        
         details += `
             <tr>
                 <td>${month}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(principal.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
@@ -97,17 +98,21 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
+    const monthlyRate = rate / 12;
+
     for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = balance * rate / 12;
-        balance += interestPortion;
+        const interestPortion = balance * monthlyRate;
+        const principalPortion = installment - interestPortion;
+        balance -= principalPortion;
+        
         details += `
             <tr>
                 <td>${month}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
-                <td>Rp 0</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
-                <td>${(rate * 100).toFixed(2)}%</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
+                <td>${(monthlyRate * 100).toFixed(2)}%</td>
             </tr>
         `;
     }
@@ -119,7 +124,7 @@ function calculateAnnuityDetails(principal, rate, term, installment) {
     let balance = principal;
     const monthlyRate = rate / 12;
     for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = balance * rate * (30 / 360);
+        const interestPortion = balance * monthlyRate;
         const principalPortion = installment - interestPortion;
         balance -= principalPortion;
         details += `
