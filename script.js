@@ -75,22 +75,28 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
     const monthlyRate = rate / 12;
+    
     for (let month = 1; month <= term * 12; month++) {
+        // Menghitung porsi bunga untuk bulan ini
         const interestPortion = balance * monthlyRate;
+        
+        // Menghitung porsi pokok
         let principalPortion = installment - interestPortion;
 
-        // Jika principalPortion lebih besar dari balance, set ke balance
+        // Pastikan porsi pokok tidak melebihi sisa pinjaman
         if (principalPortion > balance) {
             principalPortion = balance;
         }
 
+        // Kurangi sisa pinjaman dengan porsi pokok
         balance -= principalPortion;
-        
-        // Pastikan balance tidak menjadi negatif
+
+        // Pastikan balance tidak negatif
         if (balance < 0) {
             balance = 0;
         }
 
+        // Tambahkan detail ke tabel
         details += `
             <tr>
                 <td>${month}</td>
@@ -102,13 +108,15 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
             </tr>
         `;
 
-        // Jika balance sudah mencapai 0, berhenti
+        // Jika sisa pinjaman sudah 0, hentikan loop
         if (balance === 0) {
             break;
         }
     }
+
     return details;
 }
+
 
 
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
