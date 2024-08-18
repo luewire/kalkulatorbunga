@@ -73,15 +73,15 @@ function calculateLoan() {
 
 function calculateSimpleInterestDetails(principal, rate, term, installment) {
     let details = '';
-    let balance = principal;
     const monthlyRate = rate / 12;
-    
+    const totalInterest = principal * rate * term;
+    const monthlyInterest = totalInterest / (term * 12);
+
+    let balance = principal;
+
     for (let month = 1; month <= term * 12; month++) {
-        // Menghitung porsi bunga untuk bulan ini
-        const interestPortion = balance * monthlyRate;
-        
         // Menghitung porsi pokok
-        let principalPortion = installment - interestPortion;
+        let principalPortion = installment - monthlyInterest;
 
         // Pastikan porsi pokok tidak melebihi sisa pinjaman
         if (principalPortion > balance) {
@@ -102,7 +102,7 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
                 <td>${month}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(monthlyInterest.toFixed(2))}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
                 <td>${(monthlyRate * 100).toFixed(2)}%</td>
             </tr>
