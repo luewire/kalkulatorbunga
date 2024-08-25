@@ -119,6 +119,7 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
 
 
 
+//bunga majemuk
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
@@ -158,15 +159,16 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     return details;
 }
 
-
+//bunga anunitas
 function calculateAnnuityDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
     const monthlyRate = rate / 12;
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
-        const principalPortion = installment - interestPortion;
+        let principalPortion = Math.min(installment - interestPortion, balance);
         balance -= principalPortion;
+
         details += `
             <tr>
                 <td>${month}</td>
@@ -177,6 +179,11 @@ function calculateAnnuityDetails(principal, rate, term, installment) {
                 <td>${(monthlyRate * 100).toFixed(2)}%</td>
             </tr>
         `;
+
+        // Jika balance sudah mencapai 0, berhenti
+        if (balance === 0) {
+            break;
+        }
     }
     return details;
 }
