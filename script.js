@@ -126,17 +126,12 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     const monthlyRate = rate / 12;
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate;
-        let principalPortion = installment - interestPortion;
-
-        // Jika principalPortion lebih besar dari balance, set ke balance
-        if (principalPortion > balance) {
+        balance += interestPortion;
+        let principalPortion = installment;
+        if (balance > principalPortion) {
+            balance -= principalPortion;
+        } else {
             principalPortion = balance;
-        }
-
-        balance -= principalPortion;
-        
-        // Pastikan balance tidak menjadi negatif
-        if (balance < 0) {
             balance = 0;
         }
 
