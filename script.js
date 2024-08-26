@@ -121,71 +121,46 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
 
 //bunga majemuk
 
-Rumus bunga majemuk dalam JavaScript yang digunakan untuk menghitung nilai akhir berdasarkan bunga majemuk (compound interest) adalah sebagai berikut:
+for (let month = 1; month <= term * 12; month++) {
+    // Perhitungan porsi bunga untuk bulan ini
+    const interestPortion = balance * monthlyRate;
 
-Rumus Bunga Majemuk:
-Nilai Akhir
-=
-Nilai Tunai
-×
-(
-1
-+
-Suku Bunga
-)
-Jangka Waktu
-Nilai Akhir=Nilai Tunai×(1+Suku Bunga) 
-Jangka Waktu
- 
+    // Perhitungan porsi pokok yang harus dibayar bulan ini
+    const principalPortion = installment - interestPortion;
 
-Dalam JavaScript, implementasi dari rumus ini untuk menghitung nilai akhir (total) adalah seperti berikut:
-
-javascript
-Copy code
-// Menghitung nilai akhir dengan bunga majemuk
-function calculateCompoundInterestDetails(principal, rate, term, installment) {
-    let details = '';
-    let balance = principal;
-    const monthlyRate = rate / 1200; // Mengubah suku bunga tahunan ke bulanan (karena ada 12 bulan dalam setahun)
-
-    for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = balance * monthlyRate; // Menghitung porsi bunga untuk bulan ini
-        const principalPortion = installment - interestPortion; // Menghitung porsi pokok
-
-        if (balance <= 0) {
-            break;
-        }
-
-        if (balance < principalPortion) {
-            // Jika sisa saldo lebih kecil dari porsi pokok, sesuaikan cicilan untuk menyelesaikan pinjaman
-            details += `
-                <tr>
-                    <td>${month}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(0)}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
-                    <td>${(monthlyRate * 100).toFixed(2)}%</td>
-                </tr>
-            `;
-            balance = 0; // Menyetel saldo menjadi nol setelah pembayaran terakhir
-        } else {
-            balance -= principalPortion; // Mengurangi saldo dengan porsi pokok
-            details += `
-                <tr>
-                    <td>${month}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
-                    <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
-                    <td>${(monthlyRate * 100).toFixed(2)}%</td>
-                </tr>
-            `;
-        }
+    if (balance <= 0) {
+        break;  // Menghentikan loop jika saldo pinjaman sudah 0
     }
 
-    return details;
+    if (balance < principalPortion) {
+        // Jika sisa saldo lebih kecil dari porsi pokok, sesuaikan cicilan untuk menyelesaikan pinjaman
+        details += `
+            <tr>
+                <td>${month}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(0)}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
+                <td>${(monthlyRate * 100).toFixed(2)}%</td>
+            </tr>
+        `;
+        balance = 0;  // Menyetel saldo menjadi nol setelah pembayaran terakhir
+    } else {
+        // Mengurangi saldo dengan porsi pokok
+        balance -= principalPortion;
+        details += `
+            <tr>
+                <td>${month}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
+                <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
+                <td>${(monthlyRate * 100).toFixed(2)}%</td>
+            </tr>
+        `;
+    }
 }
+
 
 
 //bunga anunitas
