@@ -124,35 +124,46 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
     const monthlyRate = rate / 1200; // convert annual rate to monthly rate
+
     for (let month = 1; month <= term * 12; month++) {
         const interestPortion = balance * monthlyRate; // calculate interest for this month
-        balance = balance + interestPortion; // add interest to balance
-        let principalPortion = installment;
-        if (balance > principalPortion) {
-            balance -= principalPortion;
-        } else {
-            principalPortion = balance;
-            balance = 0;
-        }
+        const principalPortion = installment - interestPortion; // calculate principal portion
 
-        details += `
-            <tr>
-                <td>${month}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
-                <td>${(monthlyRate * 100).toFixed(2)}%</td>
-            </tr>
-        `;
-
-        // Jika balance sudah mencapai 0, berhenti
-        if (balance === 0) {
+        if (balance <= 0) {
             break;
         }
+
+        if (balance < principalPortion) {
+            // If the remaining balance is less than the principal portion, adjust the installment to finish the loan
+            details += `
+                <tr>
+                    <td>${month}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(0)}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
+                    <td>${(monthlyRate * 100).toFixed(2)}%</td>
+                </tr>
+            `;
+            balance = 0; // Set balance to zero after final payment
+        } else {
+            balance -= principalPortion; // reduce balance by the principal portion
+            details += `
+                <tr>
+                    <td>${month}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(balance.toFixed(2))}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(principalPortion.toFixed(2))}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(interestPortion.toFixed(2))}</td>
+                    <td>Rp ${new Intl.NumberFormat('id-ID').format(installment.toFixed(2))}</td>
+                    <td>${(monthlyRate * 100).toFixed(2)}%</td>
+                </tr>
+            `;
+        }
     }
+
     return details;
 }
+
 
 //bunga anunitas
 function calculateAnnuityDetails(principal, rate, term, installment) {
