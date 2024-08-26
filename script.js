@@ -120,21 +120,44 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
 
 
 //bunga majemuk
+
+Rumus bunga majemuk dalam JavaScript yang digunakan untuk menghitung nilai akhir berdasarkan bunga majemuk (compound interest) adalah sebagai berikut:
+
+Rumus Bunga Majemuk:
+Nilai Akhir
+=
+Nilai Tunai
+×
+(
+1
++
+Suku Bunga
+)
+Jangka Waktu
+Nilai Akhir=Nilai Tunai×(1+Suku Bunga) 
+Jangka Waktu
+ 
+
+Dalam JavaScript, implementasi dari rumus ini untuk menghitung nilai akhir (total) adalah seperti berikut:
+
+javascript
+Copy code
+// Menghitung nilai akhir dengan bunga majemuk
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
-    const monthlyRate = rate / 1200; // convert annual rate to monthly rate
+    const monthlyRate = rate / 1200; // Mengubah suku bunga tahunan ke bulanan (karena ada 12 bulan dalam setahun)
 
     for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = balance * monthlyRate; // calculate interest for this month
-        const principalPortion = installment - interestPortion; // calculate principal portion
+        const interestPortion = balance * monthlyRate; // Menghitung porsi bunga untuk bulan ini
+        const principalPortion = installment - interestPortion; // Menghitung porsi pokok
 
         if (balance <= 0) {
             break;
         }
 
         if (balance < principalPortion) {
-            // If the remaining balance is less than the principal portion, adjust the installment to finish the loan
+            // Jika sisa saldo lebih kecil dari porsi pokok, sesuaikan cicilan untuk menyelesaikan pinjaman
             details += `
                 <tr>
                     <td>${month}</td>
@@ -145,9 +168,9 @@ function calculateCompoundInterestDetails(principal, rate, term, installment) {
                     <td>${(monthlyRate * 100).toFixed(2)}%</td>
                 </tr>
             `;
-            balance = 0; // Set balance to zero after final payment
+            balance = 0; // Menyetel saldo menjadi nol setelah pembayaran terakhir
         } else {
-            balance -= principalPortion; // reduce balance by the principal portion
+            balance -= principalPortion; // Mengurangi saldo dengan porsi pokok
             details += `
                 <tr>
                     <td>${month}</td>
