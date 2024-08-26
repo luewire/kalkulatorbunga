@@ -123,10 +123,10 @@ function calculateSimpleInterestDetails(principal, rate, term, installment) {
 function calculateCompoundInterestDetails(principal, rate, term, installment) {
     let details = '';
     let balance = principal;
-    const monthlyRate = rate / 12;
+    const monthlyRate = rate / 1200; // convert annual rate to monthly rate
     for (let month = 1; month <= term * 12; month++) {
-        const interestPortion = balance * monthlyRate;
-        balance += interestPortion;
+        const interestPortion = balance * monthlyRate; // calculate interest for this month
+        balance = balance + interestPortion; // add interest to balance
         let principalPortion = installment;
         if (balance > principalPortion) {
             balance -= principalPortion;
